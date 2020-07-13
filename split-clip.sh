@@ -1,12 +1,15 @@
-#!/usr/bin/env bash
+#!/bin/bash -x
 
-A=0
-DURATION="${ffprobe -v error -show entries format=duration -of default=noprint_wrappers=1:nokey=1 cars_timecode.mp4}"
-DURATION=${DURATION%.*}
-CLIP_LENGT=10
+INPUT_CLIP_PATH=$1
+INPUT_CLIP_NAME=${INPUT_CLIP_PATH##*/}
+INPUT_CLIP_NAME=${INPUT_CLIP_NAME%.*}
+INPUT_CLIP_DURATION="$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $INPUT_CLIP_PATH)"
+INPUT_CLIP_DURATION=${INPUT_CLIP_DURATION%.*}
+OUTPUT_CLIP_DURATION=$2
+FINGER=0
 
-while [ $A -le $DURATION ]; do
-	ffmpeg -ss $A -i cars_timecode.mp4 -t $CLIP_LENGTH -c:v copy output-${A}.mp4
-	let "A=A+${CLIP_LENGTH}"
+while [ $FINGER -le $INPUT_CLIP_DURATION ]; do
+	ffmpeg -ss $FINGER -i ${INPUT_CLIP_PATH} -t $OUTPUT_CLIP_DURATION -c:v copy ${INPUT_CLIP_NAME}-part-${FINGER}.mp4
+	let "FINGER=FINGER+${OUTPUT_CLIP_DURATION}"
 done
 
