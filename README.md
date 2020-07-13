@@ -4,5 +4,5 @@ A small video clip splitting script, based on https://www.youtube.com/watch?v=Ab
 ### Usage
 
 ```
-./split-clip.sh <path_to_input_clip> <desired_output_chuck_duration>
+./split-clip.sh <path_to_input_clip> <desired_output_chuck_duration_in_seconds>
 ```
